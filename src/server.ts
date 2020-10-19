@@ -3,6 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import { IResolvers, makeExecutableSchema } from 'graphql-tools';
 import { GraphQLSchema } from 'graphql';
+import { graphqlHTTP } from 'express-graphql';
 
 const app = express();
 
@@ -37,13 +38,15 @@ const schema: GraphQLSchema = makeExecutableSchema({
 });
 
 
-app.use('/', (req,res) => {
-	res.send('Welcome to Express Response end point...');
-});
+app.use('/', graphqlHTTP({
+	schema,
+	graphiql: true
+}));
+
 
 const PORT = 5300;
 
 app.listen(
 	{port: PORT},
-	() => console.log(`Hola Mundo API GraphQL http://localhost:${PORT}`)
+	() => console.log(`Hola Mundo API GraphQL http://localhost:${PORT}/graphql`)
 );
